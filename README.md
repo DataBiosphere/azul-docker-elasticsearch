@@ -1,0 +1,1 @@
+# azul-docker-elasticsearch
