@@ -1,4 +1,6 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+ARG azul_docker_elasticsearch_upstream_version
+
+FROM docker.elastic.co/elasticsearch/elasticsearch:${azul_docker_elasticsearch_upstream_version}
 
 ARG azul_docker_elasticsearch_version
 
