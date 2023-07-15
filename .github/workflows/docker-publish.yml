@@ -1,0 +1,55 @@
+name: Docker
+
+on:
+  pull_request:
+  push:
+    tags: ['*']
+
+env:
+  azul_docker_elasticsearch_upstream_version: 7.17.10
+  azul_docker_elasticsearch_version: 2  # increment this to update the OS packages
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Verify Git tag is valid
+        if: github.ref_type == 'tag'
+        run: test '${{ env.azul_docker_elasticsearch_upstream_version }}-${{ env.azul_docker_elasticsearch_version }}' == '${{ github.ref_name }}'
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Verify the tag is on the default branch
+        if: github.ref_type == 'tag'
+        run: git merge-base --is-ancestor ${{ github.ref_name }} origin/${{ github.event.repository.default_branch }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log into registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and conditionally push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          build-args: |
+            azul_docker_elasticsearch_version=${{ env.azul_docker_elasticsearch_version }}
+            azul_docker_elasticsearch_upstream_version=${{ env.azul_docker_elasticsearch_upstream_version }}
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' && github.ref_type == 'tag' }}
+          tags: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ env.azul_docker_elasticsearch_upstream_version }}-${{ env.azul_docker_elasticsearch_version }}
