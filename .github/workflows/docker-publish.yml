@@ -8,7 +8,7 @@ on:
 
 env:
   azul_docker_elasticsearch_upstream_version: 7.17.10
-  azul_docker_elasticsearch_version: 4  # increment this to update the OS packages
+  azul_docker_elasticsearch_internal_version: 4  # increment this to update the OS packages
 
 jobs:
   build:
@@ -40,9 +40,14 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           build-args: |
-            azul_docker_elasticsearch_version=${{ env.azul_docker_elasticsearch_version }}
             azul_docker_elasticsearch_upstream_version=${{ env.azul_docker_elasticsearch_upstream_version }}
+            azul_docker_elasticsearch_internal_version=${{ env.azul_docker_elasticsearch_internal_version }}
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ env.azul_docker_elasticsearch_upstream_version }}-${{ env.azul_docker_elasticsearch_version }}
+          tags: "${{ format(
+            '{0}:{1}-{2}', 
+            vars.DOCKERHUB_REPOSITORY,
+            env.azul_docker_elasticsearch_upstream_version,
+            env.azul_docker_elasticsearch_internal_version
+          ) }}"
