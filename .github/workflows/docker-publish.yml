@@ -56,3 +56,5 @@ jobs:
             env.azul_docker_elasticsearch_upstream_version,
             env.azul_docker_elasticsearch_internal_version
           ) }}"
+          cache-from: type=registry,ref=${{ vars.DOCKERHUB_REPOSITORY }}_buildcache
+          cache-to: type=registry,ref=${{ vars.DOCKERHUB_REPOSITORY }}_buildcache,mode=max
