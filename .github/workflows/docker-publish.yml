@@ -8,7 +8,7 @@ on:
 
 env:
   azul_docker_elasticsearch_upstream_version: 7.17.15
-  azul_docker_elasticsearch_internal_version: 6  # increment this to update the OS packages
+  azul_docker_elasticsearch_internal_version: 7  # increment this to update the OS packages
 
 jobs:
   build:
