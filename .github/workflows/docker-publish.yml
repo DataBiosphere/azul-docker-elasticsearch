@@ -19,13 +19,13 @@ env:
 
   # The tag of the Elasticsearch image that's used as the base for this image.
   #
-  azul_docker_elasticsearch_upstream_version: 7.17.15
+  azul_docker_elasticsearch_upstream_version: 7.17.16
 
   # The version of this image. The image will be tagged with the version of the
   # upstream image followed by the value of this variable. Increment this value
   # to update the OS packages installed in the image.
   #
-  azul_docker_elasticsearch_internal_version: 7
+  azul_docker_elasticsearch_internal_version: 8
 
 jobs:
   build:
