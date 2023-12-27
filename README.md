@@ -16,6 +16,6 @@ docker pull localhost:5000/docker.io/ucscgi/azul-elasticsearch:7.17.15-6
 # If an unnecessary package is found to have critical or high vulnerabilities,
 # add a `RUN` instruction to the Dockerfile to remove the package.
 # To test the image in Azul, run:
-cd ../azul; azul_docker_elasticsearch_version=7.17.15-6 azul_docker_registry=localhost:5000/ make test
+(cd ../azul && azul_docker_elasticsearch_version=7.17.15-6 azul_docker_registry=localhost:5000/ make test)
 make stop_registry
 ```
