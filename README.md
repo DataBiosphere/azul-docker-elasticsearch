@@ -17,11 +17,24 @@ docker pull localhost:5000/docker.io/ucscgi/azul-elasticsearch:7.17.15-6
 # add a `RUN` instruction to the Dockerfile to remove the package.
 # To test the image in Azul, you will need to temporarily modify Azul's
 # `environment.py` to set the appropriate `azul_docker_images` value using the
-# full image name noted above (starting with "localhost"). With this change in
-# place, run:
-_refresh
+# full image name noted above (starting with "localhost").
+cd ../azul
+git diff
+>   diff --git a/environment.py b/environment.py
+>   index f888a1b8e..5970816ac 100644
+>   --- a/environment.py
+>   +++ b/environment.py
+>   @@ -276,7 +276,7 @@ def env() -> Mapping[str, Optional[str]]:
+>                    'ref': 'docker.io/ucscgi/azul-pycharm:2023.3.4-15'
+>                },
+>                'elasticsearch': {
+>   -                'ref': 'docker.io/ucscgi/azul-elasticsearch:7.17.18-13'
+>   +                'ref': 'localhost:5000/docker.io/ucscgi/azul-elasticsearch:7.17.18-13'
+>                },
+>                'bigquery_emulator': {
+>                    'ref': 'ghcr.io/hannes-ucsc/bigquery-emulator:azul'
 make image_manifests.json
 azul_docker_registry="" make test
-# Finally, back in your working tree for this repository:
+cd -
 make stop_registry
 ```
